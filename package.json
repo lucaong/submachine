@@ -1,0 +1,14 @@
+{
+  "author": "Luca Ongaro <mail@lucaongaro.eu> (http://www.lucaongaro.eu)",
+  "name": "submachine",
+  "version": "0.0.1",
+  "main": "./lib/submachine.js",
+  "scripts": {
+    "test": "./node_modules/.bin/coffee -c ./lib/submachine.coffee && ./node_modules/.bin/buster-test -c spec/buster.js"
+  },
+  "devDependencies": {
+    "buster": "0.6.x",
+    "coffee-script": "",
+    "buster-coffee": ""
+  }
+}
