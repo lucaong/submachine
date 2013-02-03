@@ -49,6 +49,18 @@ describe "Submachine", ->
         @m.switchTo "bar", 123, 321
         expect( spy ).toHaveBeenCalledOnceWith 123, 321
 
+      it "invokes wildcard callbacks", ->
+        spy1 = @spy()
+        spy2 = @spy()
+        @m.state = "foo"
+        @m.callbacks =
+          "*":
+            onEnter: spy1
+            onLeave: spy2
+        @m.switchTo "bar", 123, 321
+        expect( spy1 ).toHaveBeenCalledOnceWith 123, 321
+        expect( spy2 ).toHaveBeenCalledOnceWith 123, 321
+
   describe "transition", ->
 
     before ->

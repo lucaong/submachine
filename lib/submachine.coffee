@@ -44,14 +44,20 @@ class Submachine
     @callbacks           ?= {}
     @callbacks[ @state ] ?= {}
     @callbacks[ state ]  ?= {}
+    @callbacks["*"]      ?= {}
 
-    if @state? and @callbacks[ @state ].onLeave?
-      @callbacks[ @state ].onLeave.apply( @, args )
+    if @state?
+      if @callbacks[ @state ].onLeave?
+        @callbacks[ @state ].onLeave.apply( @, args )
+      if @callbacks["*"].onLeave?
+        @callbacks["*"].onLeave.apply( @, args )
 
     @state = state
 
     if @callbacks[ @state ].onEnter?
       @callbacks[ @state ].onEnter.apply( @, args )
+    if @callbacks["*"].onEnter?
+      @callbacks["*"].onEnter.apply( @, args )
 
   onEnter: ( state, cbk ) ->
     @callbacks ?= {}
