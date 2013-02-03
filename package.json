@@ -2,7 +2,7 @@
   "author": "Luca Ongaro <mail@lucaongaro.eu> (http://www.lucaongaro.eu)",
   "name": "submachine",
   "description": "A clean and readable DSL for easily creating finite state machines in Node and in the browser.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "./lib/submachine.js",
   "repository": {
     "type": "git",

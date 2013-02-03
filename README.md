@@ -1,6 +1,10 @@
 # Submachine
 
-A clean and readable DSL for easily creating finite state machines. With a footprint of less than 200 lines of code unminified and with no dependency, `Submachine` works in browser and in Node, and it can be imported with CommonJS, AMD and normal browser `<script>`. CoffeeScript and JavaScript versions provided.
+A clean and readable DSL for easily creating finite state machines. With a
+footprint of less than 200 lines of code unminified and with no dependency,
+`Submachine` works in browser and in Node, and it can be imported with
+CommonJS, AMD and normal browser `<script>`. CoffeeScript and JavaScript
+versions provided.
 
 ## Usage
 
@@ -90,3 +94,13 @@ normally should not be called directly.
   1. Fork the project and setup the environment with `npm install`
   2. Write new features and relative tests (with Buster JS)
   3. Send pull request (please do not change version number)
+
+## Changelog
+
+### 0.0.2
+
+  * `initState` throws error if called when state is already set
+
+### 0.0.1
+
+  * First release
