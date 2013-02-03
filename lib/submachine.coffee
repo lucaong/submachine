@@ -33,7 +33,7 @@ class Submachine
       from: obj.from,
       to:   obj.to
 
-    @[ obj.on ] ?= ( args... ) ->
+    @[ obj.on ] ?= ( args... ) =>
       for tr in @events[ obj.on ]
         if @state is tr.from or tr.from is "*"
           @switchTo tr.to, args...
