@@ -76,6 +76,7 @@ class Submachine
     @onLeave state, cbks.onLeave if cbks.onLeave?
 
   initState: ( state ) ->
+    throw new Error "state was already initialized" if @state?
     @switchTo state
 
 # Export as:

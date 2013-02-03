@@ -149,6 +149,10 @@ describe "Submachine", ->
       @m.initState "foo"
       expect( cbk ).toHaveBeenCalled()
 
+    it "throws error if called when the state is already set", ->
+      @m.state = "foo"
+      expect( => @m.initState "bar" ).toThrow()
+
   describe "constructor", ->
     it "executes funtion in the scope of the new object if given", ->
       probe = null
