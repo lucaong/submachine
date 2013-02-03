@@ -40,7 +40,9 @@ class Submachine
           break
 
   switchTo: ( state, args... ) ->
-    throw new Error "invalid state #{state}" if not contains @states, state
+    if not contains @states, state
+      throw new Error "invalid state #{state}"
+
     @callbacks           ?= {}
     @callbacks[ @state ] ?= {}
     @callbacks[ state ]  ?= {}
