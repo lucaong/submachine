@@ -1,4 +1,4 @@
-class SubMachine
+class Submachine
 
   # Private
 
@@ -27,8 +27,17 @@ class SubMachine
     unless obj? and obj.from? and obj.to? and obj.on?
       throw new Error "transition must define 'from', 'to' and 'on'"
 
-    @[ obj.on ] = ->
-      @switchTo obj.to if @state is obj.from or obj.from is "*"
+    @events ?= {}
+    @events[ obj.on ] ?= []
+    @events[ obj.on ].push
+      from: obj.from,
+      to:   obj.to
+
+    @[ obj.on ] ?= ->
+      for tr in @events[ obj.on ]
+        if @state is tr.from or tr.from is "*"
+          @switchTo tr.to
+          break
 
   switchTo: ( state ) ->
     throw new Error "invalid state #{state}" if not contains @states, state
@@ -57,5 +66,16 @@ class SubMachine
   initState: ( state ) ->
     @switchTo state
 
-# Export
-window.SubMachine = SubMachine
+# Export as:
+# CommonJS module
+if exports?
+  if module? and module.exports?
+    exports = module.exports = Submachine
+  exports.Submachine = Submachine
+# AMD module
+else if typeof define is "function" and define.amd
+  define ->
+    Submachine
+# Browser global
+else
+  @Submachine = Submachine

@@ -1,9 +1,9 @@
 buster.spec.expose()
 
-describe "SubMachine", ->
+describe "Submachine", ->
 
   before ->
-    @m = new SubMachine
+    @m = new Submachine
 
   after ->
     delete @m
@@ -17,7 +17,7 @@ describe "SubMachine", ->
     it "can also accept array", ->
       @m.hasStates ["foo", "bar", "baz"]
       expect( @m.states ).toEqual ["foo", "bar", "baz"]
-  
+
   describe "switchTo", ->
 
     before ->
@@ -54,6 +54,13 @@ describe "SubMachine", ->
       @spySwitchTo = @spy()
       @stub( @m, "switchTo", @spySwitchTo )
 
+    after ->
+      delete @spySwitchTo
+
+    it "adds a new event", ->
+      @m.transition from: "foo", to: "bar", on: "baz"
+      expect( @m.events.baz[0] ).toEqual from: "foo", to: "bar"
+
     it "defines a new method for the event", ->
       @m.transition from: "foo", to: "bar", on: "baz"
       expect( typeof @m.baz ).toEqual "function"
@@ -63,12 +70,22 @@ describe "SubMachine", ->
       @m.state = "foo"
       @m.qux()
       expect( @spySwitchTo ).toHaveBeenCalledWith "bar"
-    
+
     it "defines a method that doesn't call switchTo('bar') if state is not 'foo'", ->
       @m.transition from: "foo", to: "bar", on: "qux"
       @m.state = "baz"
       @m.qux()
       refute.calledWith @spySwitchTo, "bar"
+
+    it "lets me define more than one transition for an event", ->
+      @m.transition from: "foo", to: "bar", on: "qux"
+      @m.transition from: "bar", to: "baz", on: "qux"
+      @m.state = "foo"
+      @m.qux()
+      expect( @spySwitchTo ).toHaveBeenCalledWith "bar"
+      @m.state = "bar"
+      @m.qux()
+      expect( @spySwitchTo ).toHaveBeenCalledWith "baz"
 
     it "accepts `from: '*'` as wildcard", ->
       @m.transition from: "*", to: "bar", on: "qux"
@@ -115,6 +132,6 @@ describe "SubMachine", ->
   describe "constructor", ->
     it "executes funtion in the scope of the new object if given", ->
       probe = null
-      m = new SubMachine ->
+      m = new Submachine ->
         probe = @
       expect( probe ).toBe m
