@@ -31,21 +31,23 @@ describe "Submachine", ->
     it "throws error if state does not exist", ->
       expect( => @m.switchTo("quux") ).toThrow()
 
-    it "invokes onLeave callback on old state if defined", ->
-      spy = @spy()
-      @m.callbacks =
-        foo:
-          onLeave: spy
-      @m.switchTo "bar"
-      expect( spy ).toHaveBeenCalledOnce()
+    describe "if callbacks are defined", ->
 
-    it "invokes onEnter callback on new state if defined", ->
-      spy = @spy()
-      @m.callbacks =
-        bar:
-          onEnter: spy
-      @m.switchTo "bar"
-      expect( spy ).toHaveBeenCalledOnce()
+      it "invokes onLeave callback on old state passing extra args", ->
+        spy = @spy()
+        @m.callbacks =
+          foo:
+            onLeave: spy
+        @m.switchTo "bar", 123, 321
+        expect( spy ).toHaveBeenCalledOnceWith 123, 321
+
+      it "invokes onEnter callback on new state passing extra args", ->
+        spy = @spy()
+        @m.callbacks =
+          bar:
+            onEnter: spy
+        @m.switchTo "bar", 123, 321
+        expect( spy ).toHaveBeenCalledOnceWith 123, 321
 
   describe "transition", ->
 
@@ -76,6 +78,12 @@ describe "Submachine", ->
       @m.state = "baz"
       @m.qux()
       refute.calledWith @spySwitchTo, "bar"
+
+    it "defines a method that calls switchTo passing extra args", ->
+      @m.transition from: "foo", to: "bar", on: "qux"
+      @m.state = "foo"
+      @m.qux( 123, 321 )
+      expect( @spySwitchTo ).toHaveBeenCalledWith "bar", 123, 321
 
     it "lets me define more than one transition for an event", ->
       @m.transition from: "foo", to: "bar", on: "qux"

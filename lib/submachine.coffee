@@ -33,21 +33,21 @@ class Submachine
       from: obj.from,
       to:   obj.to
 
-    @[ obj.on ] ?= ->
+    @[ obj.on ] ?= ( args... ) ->
       for tr in @events[ obj.on ]
         if @state is tr.from or tr.from is "*"
-          @switchTo tr.to
+          @switchTo tr.to, args...
           break
 
-  switchTo: ( state ) ->
+  switchTo: ( state, args... ) ->
     throw new Error "invalid state #{state}" if not contains @states, state
     @callbacks           ?= {}
     @callbacks[ @state ] ?= {}
     @callbacks[ state ]  ?= {}
 
-    @callbacks[ @state ].onLeave() if @state? and @callbacks[ @state ].onLeave?
+    @callbacks[ @state ].onLeave.apply( @, args ) if @state? and @callbacks[ @state ].onLeave?
     @state = state
-    @callbacks[ @state ].onEnter() if @callbacks[ @state ].onEnter?
+    @callbacks[ @state ].onEnter.apply( @, args ) if @callbacks[ @state ].onEnter?
 
   onEnter: ( state, cbk ) ->
     @callbacks ?= {}
