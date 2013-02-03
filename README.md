@@ -35,6 +35,56 @@ onoff = new Submachine, ->
   @initState "on"
 ```
 
+## Methods
+
+### hasStates
+
+`hasStates( states )` accepts state names as different arguments or as an array
+and uses them to compose the list of the valid states.
+
+### transition
+
+`transition( obj )` usually takes an object literal specifying an event name
+triggering the transition and the name of the states the transition goes from
+and to (e.g. `{ on: "open", from: "locked", to: "unlocked" }` meaning than on
+event "open" the state transitions from "locked" to "unlocked"). It defines a
+method with the same name as the event, that triggers the transition to the
+"to" state if called when in the "from" state. More than one transition can be
+defined from the same event. Transitions are evaluated in order, so in case
+more than one transition applies, only the first one gets triggered.
+
+### onEnter
+
+`onEnter( state, fn )` causes the callback function `fn` to be called whenever
+transitioning to state `state`. `state` can be a state name, or the special
+wildcard "*" to mean "any state". The callback gets passed any argument passed
+to the event method.
+
+### onLeave
+
+`onLeave( state, fn )` causes the callback function `fn` to be called whenever
+transitioning from state `state` to another. `state` can be a state name, or
+the special wildcard "*" to mean "any state". The callback gets passed any
+argument passed to the event method.
+
+### setupState
+
+`setupState( state, obj )` is a shortcut for specifying both `onEnter` and
+`onLeave` callbacks at once (e.g. `setupState("locked", { onEnter: enterCbk,
+onLeave: leaveCbk })`).
+
+### initState
+
+`initState( state )` is used to initialize the state of the state machine to
+`state`, also calling its `onEnter` callback if defined. It throws an error if
+called when the state is already set.
+
+### switchTo
+
+`switchTo( state )` triggers a state transition to `state` executing also the
+appropriate callbacks. This method is used internally by the event methods and
+normally should not be called directly.
+
 ## Contribute
 
   1. Fork the project and setup the environment with `npm install`
