@@ -30,6 +30,9 @@ onoff = new Submachine, ->
   # Events (like `toggle` here) are exposed as methods
   # so it's easy to hook them to browser events
   $button.click @toggle
+
+  # Initialize state
+  @initState "on"
 ```
 
 ## Contribute
