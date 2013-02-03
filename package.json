@@ -1,14 +1,29 @@
 {
   "author": "Luca Ongaro <mail@lucaongaro.eu> (http://www.lucaongaro.eu)",
   "name": "submachine",
+  "description": "A clean and readable DSL for easily creating finite state machines in Node and in the browser.",
   "version": "0.0.1",
   "main": "./lib/submachine.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:lucaong/submachine.git"
+  },
+  "keywords": [
+    "state machine",
+    "finite state machine",
+    "fsm"
+  ],
   "scripts": {
-    "test": "./node_modules/.bin/coffee -c ./lib/submachine.coffee && ./node_modules/.bin/buster-test -c spec/buster.js"
+    "test": "npm run compile && ./node_modules/.bin/buster-test -c spec/buster.js",
+    "compile": "./node_modules/.bin/coffee -c ./lib/submachine.coffee",
+    "minify": "./node_modules/.bin/uglifyjs ./lib/submachine.js -o ./lib/submachine.min.js",
+    "build": "npm run compile && npm run minify"
   },
   "devDependencies": {
     "buster": "0.6.x",
     "coffee-script": "",
-    "buster-coffee": ""
-  }
+    "buster-coffee": "",
+    "uglify-js": ""
+  },
+  "license": "MIT"
 }
