@@ -5,13 +5,6 @@ class Submachine
   isArray = ( maybe_array ) ->
     return ({}).toString.apply( maybe_array ) is "[object Array]"
 
-  contains = ( array, item ) ->
-    if array.indexOf?
-      return array.indexOf( item ) >= 0
-    else
-      return true for elem in array when elem is item
-    false
-
   # Public
 
   constructor: ( fn ) ->
@@ -40,7 +33,7 @@ class Submachine
           break
 
   switchTo: ( state, args... ) ->
-    if not contains @states, state
+    if state not in @states
       throw new Error "invalid state #{state}"
 
     @callbacks           ?= {}
