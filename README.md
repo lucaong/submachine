@@ -41,6 +41,12 @@ onoff = new Submachine, ->
 
 ## Methods
 
+### constructor
+
+You can pass a function to the constructor `new Submachine( func )`, and it
+will be executed in the scope of the new instance. This makes it easy to group
+in the same code block all the state machine definition code.
+
 ### hasStates
 
 `hasStates( states )` accepts state names as different arguments or as an array
