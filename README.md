@@ -8,35 +8,61 @@ versions provided.
 
 ## Usage
 
-Let's say we need to create a toggle button in the browser using CoffeeScript:
+Let's say we need to create a toggle button in the browser:
+
+```javascript
+// This example assumes jQuery is present, but Submachine
+// does not depend on it in any way
+var $button  = $("button.toggle");
+
+var toggler = new Submachine(function() {
+  // Declare states
+  this.hasStates("on", "off");
+
+  // Define events and transitions
+  this.transition({ from: "on",  to: "off", on: "toggle" });
+  this.transition({ from: "off", to: "on",  on: "toggle" });
+
+  // Optionally define callbacks to setup/teardown states
+  // (here using "*" wildcard to match any state)
+  this.setupState("*", {
+    onEnter: function() {
+      $button.addClass( this.state ).val( this.state );
+    },
+    onLeave: function() {
+      $button.removeClass( this.state );
+    }
+  });
+
+  // Initialize state
+  this.initState("on");
+});
+
+// Events (like `toggle` here) are exposed as methods
+// so it's easy to hook them to browser events
+$button.click( toggler.toggle );
+```
+
+Or the same thing in CoffeeScript, even more readable:
 
 ```coffeescript
-# This example assumes jQuery is present, but Submachine
-# does not depend on it in any way
-$button = $(".toggle-button")
+$button = $("button.toggle")
 
-onoff = new Submachine, ->
-  # Declare possible states
+toggler = new Submachine, ->
   @hasStates "on", "off"
 
-  # Define events and transitions
   @transition from: "on",  to: "off", on: "toggle"
   @transition from: "off", to: "on",  on: "toggle"
 
-  # Optionally define callbacks to setup/teardown states
-  # (here using "*" wildcard to match any state)
   @setupState "*",
     onEnter: ->
       $button.addClass( @state ).val @state
     onLeave: ->
       $button.removeClass @state
 
-  # Events (like `toggle` here) are exposed as methods
-  # so it's easy to hook them to browser events
-  $button.click @toggle
-
-  # Initialize state
   @initState "on"
+
+$button.click toggler.toggle
 ```
 
 ## Methods
