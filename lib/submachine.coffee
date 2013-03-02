@@ -57,8 +57,8 @@ class Submachine
   @subclass: ( fn ) ->
     parent = @
     sub = ( args... ) ->
-      if @init?
-        @init args...
+      if @initialize?
+        @initialize args...
       else parent.apply @, args
     sub[ prop ] = value for prop, value of parent
     sub:: = new parent

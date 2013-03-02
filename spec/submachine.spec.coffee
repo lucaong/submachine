@@ -112,11 +112,11 @@ describe "Submachine", ->
         expect( probe ).toBe sub
         expect( proto ).toBe sub::
 
-      it "creates a subclass constructor that calls the init() method passing all arguments, if defined", ->
+      it "creates a subclass constructor that calls the initialize() method passing all arguments, if defined", ->
         spy = @spy()
         sub = @M.subclass ( proto ) ->
           @hasStates "abc"
-          proto.init = spy
+          proto.initialize = spy
         new sub "abc", 123
         expect( spy ).toHaveBeenCalledOnceWith "abc", 123
 

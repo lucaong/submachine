@@ -46,7 +46,7 @@ toggler = new Toggler $("button.toggle")
 JavaScript doesn't have (yet) the awesome CoffeeScript class syntax, but
 `Submachine` comes to the rescue providing a `subclass` method that implements
 class inheritance and accepts a function evaluated in the class scope. Also,
-the `init` method provides functionality similar to CoffeeScript's
+the `initialize` method provides functionality similar to CoffeeScript's
 `constructor`.
 
 ```javascript
@@ -66,7 +66,7 @@ var Toggler = Submachine.subclass(function( proto ) {
     this.btn.removeClass( this.state );
   });
 
-  proto.init = function( $btn ) {
+  proto.initialize = function( $btn ) {
     var self = this;
     this.btn = $btn;
     $btn.click(function() {
