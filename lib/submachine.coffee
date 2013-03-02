@@ -55,16 +55,13 @@ class Submachine
     @onLeave state, cbks.onLeave if cbks.onLeave?
 
   @subclass: ( fn ) ->
-    parent = @
-    sub = ( args... ) ->
-      if @initialize?
-        @initialize args...
-      else parent.apply @, args
-    sub[ prop ] = value for prop, value of parent
-    sub:: = new parent
-    sub::constructor = sub
-    fn?.call sub, sub::
-    sub
+    class Subclass extends @
+      constructor: ( args... ) ->
+        if @initialize?
+          @initialize args...
+        else super args...
+    fn?.call Subclass, Subclass::
+    Subclass
 
   # Public instance methods
 
