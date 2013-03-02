@@ -119,9 +119,15 @@ onLeave: leaveCbk })`).
 
 ### subclass
 
-`subclass( fn )` is used to implement class inheritance when Submachine is used
-with plain JavaScript. It creates the subclass, evaluates `fn` in its scope and
-returns it, replacing CoffeeScript's `class` syntax.
+`subclass( fn )` is used to implement class inheritance when
+Submachine is used with plain JavaScript. It creates the
+subclass, evaluates `fn` in its scope passing the instance
+prototype as the first argument and finally returns the
+subclass, replacing CoffeeScript's `class` syntax.  Moreover,
+the subclass' constructor executes the `initialize` instance
+method if available, passing all the arguments, making it
+possible to override the constructor logic, as in
+CoffeeScript's `constructor`.
 
 
 ## Public instance methods
