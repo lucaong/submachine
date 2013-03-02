@@ -31,14 +31,14 @@ class Toggler extends Submachine
   @onLeave "*", ->
     @btn.removeClass @state
   
-  constructor: ( $btn, state ) ->
+  constructor: ( $btn ) ->
     @btn = $btn
     # Events (like `toggle` here) are exposed as instance methods
     @btn.click => @toggle
-    @initState state
+    @initState "on"
 
 # Instantiate
-toggler = new Toggler $("button.toggle"), "on"
+toggler = new Toggler $("button.toggle")
 ```
 
 ### JavaScript
@@ -66,17 +66,17 @@ var Toggler = Submachine.subclass(function( proto ) {
     this.btn.removeClass( this.state );
   });
 
-  proto.init = function( $btn, state ) {
+  proto.init = function( $btn ) {
     var self = this;
     this.btn = $btn;
     $btn.click(function() {
       self.toggle();
     });
-    this.initState( state );
+    this.initState("on");
   }
 });
 
-toggler = new Toggler($("button.toggle"), "on");
+var toggler = new Toggler( $("button.toggle") );
 ```
 
 ## Public class methods
