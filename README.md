@@ -1,16 +1,15 @@
-# Submachine
+# Submachine - Kick-ass finite state machines in JavaScript and CoffeeScript
 
-A clean and readable DSL for easily creating finite state machines. With a
-footprint of less than 200 lines of code unminified and with no dependency,
-`Submachine` works in browser and in Node, and it can be imported with
-CommonJS, AMD and normal browser `<script>`. CoffeeScript and JavaScript
-versions provided.
+A clean and readable DSL for easily creating finite state machines in
+JavaScript and CoffeeScript. With a footprint of less than 200 lines of
+unminified code and with no dependency, `Submachine` works in browser and in
+Node, and it can be imported with CommonJS, AMD and normal browser `<script>`.
 
 ## Usage
 
-Let's say we need to create a toggle button in the browser (these examples
-assume for brevity that jQuery is present, but `Submachine` does not depend on
-it in any way):
+`Submachine` works in Node and in the browser, and has no dependency, but for
+the sake of this example we assume that we need to create a toggle button
+widget in the browser using jQuery:
 
 ### CoffeeScript
 
@@ -83,8 +82,8 @@ var toggler = new Toggler( $("button.toggle") );
 
 ### hasStates
 
-`hasStates( states )` accepts state names as different arguments or as an array
-and uses them to compose the list of the valid states.
+`hasStates( states )` accepts state names as different arguments or as an
+array and uses them to compose the list of the valid states.
 
 ### transition
 
@@ -101,15 +100,16 @@ more than one transition applies, only the first one gets triggered.
 
 `onEnter( state, fn )` causes the callback function `fn` to be called whenever
 transitioning to state `state`. `state` can be a state name, or the special
-wildcard "*" to mean "any state". The callback is evaluated in the scope of the
-instance, and gets passed any argument passed to the event method.
+wildcard "*" to mean "any state". The callback is evaluated in the scope of
+the instance, and gets passed any argument passed to the event method.
 
 ### onLeave
 
 `onLeave( state, fn )` causes the callback function `fn` to be called whenever
 transitioning from state `state` to another. `state` can be a state name, or
 the special wildcard "*" to mean "any state". The callback is evaluated in the
-scope of the instance, and gets passed any argument passed to the event method.
+scope of the instance, and gets passed any argument passed to the event
+method.
 
 ### setupState
 
@@ -119,24 +119,22 @@ onLeave: leaveCbk })`).
 
 ### subclass
 
-`subclass( fn )` is used to implement class inheritance when
-Submachine is used with plain JavaScript. It creates the
-subclass, evaluates `fn` in its scope passing the instance
-prototype as the first argument and finally returns the
-subclass, replacing CoffeeScript's `class` syntax.  Moreover,
-the subclass' constructor executes the `initialize` instance
-method if available, passing all the arguments, making it
-possible to override the constructor logic, as in
-CoffeeScript's `constructor`.
+`subclass( fn )` is used to implement class inheritance when Submachine is
+used with plain JavaScript. It creates the subclass, evaluates `fn` in its
+scope passing the instance prototype as the first argument and finally returns
+the subclass, replacing CoffeeScript's `class` syntax.  Moreover, the
+subclass' constructor executes the `initialize` instance method if available,
+passing all the arguments, making it possible to override the constructor
+logic, as in CoffeeScript's `constructor`.
 
 
 ## Public instance methods
 
 ### constructor
 
-By default it does nothing but optionally getting a state name and initializing
-the state with it by calling `initState`, but it can be overridden to do other
-things if needed.
+By default it does nothing but optionally getting a state name and
+initializing the state with it by calling `initState`, but it can be
+overridden to do other things if needed.
 
 ### initState
 
@@ -160,11 +158,10 @@ normally should not be called directly.
 
 ### 0.1.0
 
-  * Big API change: now `Submachine` is meant to be
-    subclassed, so most methods are class methods now
+  * Big API change: now `Submachine` is meant to be subclassed, so most methods
+    are class methods now
 
-  * This is a new minor version release, not maintaining
-    backward compatibility
+  * This is a new minor version release, not maintaining backward compatibility
 
 ### 0.0.2
 
