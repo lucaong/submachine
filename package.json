@@ -16,7 +16,7 @@
   "scripts": {
     "test": "npm run compile && ./node_modules/.bin/buster-test -c spec/buster.js",
     "compile": "./node_modules/.bin/coffee -c ./lib/submachine.coffee",
-    "minify": "./node_modules/.bin/uglifyjs ./lib/submachine.js -o ./lib/submachine.min.js",
+    "minify": "./node_modules/.bin/uglifyjs ./lib/submachine.js --compress --mangle -o ./lib/submachine.min.js",
     "build": "npm run compile && npm run minify"
   },
   "devDependencies": {
