@@ -33,7 +33,6 @@ class Toggler extends Submachine
   
   constructor: ( $btn, state ) ->
     @btn = $btn
- 
     # Events (like `toggle` here) are exposed as instance methods
     @btn.click => @toggle
     @initState state
@@ -157,6 +156,8 @@ normally should not be called directly.
 
   * Big API change: now Submachine is meant to be subclassed so most methods
     are class methods now
+
+  * This is a new minor version release, not maintaining backward compatibility
 
 ### 0.0.2
 
