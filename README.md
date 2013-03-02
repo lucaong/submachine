@@ -49,9 +49,6 @@ the `initialize` method provides functionality similar to CoffeeScript's
 `constructor`.
 
 ```javascript
-// This example assumes jQuery is present, but Submachine
-// does not depend on it in any way
-
 var Toggler = Submachine.subclass(function( proto ) {
   this.hasStates("on", "off");
 
