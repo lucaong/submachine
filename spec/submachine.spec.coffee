@@ -159,3 +159,19 @@ describe "Submachine", ->
       m = new Submachine ->
         probe = @
       expect( probe ).toBe m
+
+  describe "toDOT", ->
+    it "returns a DOT representation of the state machine graph", ->
+      m = new Submachine ->
+        @hasStates "foo", "bar", "baz"
+        @transition from: "foo", to: "bar", on: "foobar"
+        @transition from: "bar", to: "baz", on: "barbaz"
+      dot =
+        """digraph FooMachine {
+          foo [label="foo"];
+          bar [label="bar"];
+          baz [label="baz"];
+          foo -> bar [label="foobar"];
+          bar -> baz [label="barbaz"];
+        }"""
+      expect( m.toDOT("FooMachine") ).toEqual dot

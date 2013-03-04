@@ -72,6 +72,15 @@ class Submachine
     throw new Error "state was already initialized" if @state?
     @switchTo state
 
+  toDOT: ( name ) ->
+    dot = "digraph #{name||'submachine'} {\n"
+    for state in @states
+      dot += "  #{state} [label=\"#{state}\"];\n"
+    for event, transitions of @events
+      for t in transitions
+        dot += "  #{t.from} -> #{t.to} [label=\"#{event}\"];\n"
+    dot += "}"
+
 # Export as:
 # CommonJS module
 if exports?
