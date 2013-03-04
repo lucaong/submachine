@@ -16,11 +16,11 @@ describe "Submachine", ->
 
       it "creates the array of states", ->
         @M.hasStates "foo", "bar", "baz"
-        expect( @M::states ).toEqual ["foo", "bar", "baz"]
+        expect( @M::_states ).toEqual ["foo", "bar", "baz"]
 
       it "can also accept array", ->
         @M.hasStates ["foo", "bar", "baz"]
-        expect( @M::states ).toEqual ["foo", "bar", "baz"]
+        expect( @M::_states ).toEqual ["foo", "bar", "baz"]
 
     describe "transition", ->
 
@@ -34,7 +34,7 @@ describe "Submachine", ->
 
       it "adds a new event", ->
         @M.transition from: "foo", to: "bar", on: "baz"
-        expect( @M::events.baz[0] ).toEqual from: "foo", to: "bar"
+        expect( @M::_events.baz[0] ).toEqual from: "foo", to: "bar"
 
       it "defines a new instance method for the event", ->
         @M.transition from: "foo", to: "bar", on: "baz"
@@ -78,13 +78,13 @@ describe "Submachine", ->
       it "adds an onEnter callback for the given state", ->
         cbk = ->
         @M.onEnter "foo", cbk
-        expect( @M::callbacks.foo.onEnter ).toBe cbk
+        expect( @M::_callbacks.foo.onEnter ).toBe cbk
 
     describe "onLeave", ->
       it "adds an onLeave callback for the given state", ->
         cbk = ->
         @M.onLeave "foo", cbk
-        expect( @M::callbacks.foo.onLeave ).toBe cbk
+        expect( @M::_callbacks.foo.onLeave ).toBe cbk
 
     describe "setupState", ->
       it "adds onEnter and onLeave callbacks for the given state", ->
@@ -93,8 +93,8 @@ describe "Submachine", ->
         @M.setupState "foo",
           onEnter: cbk1,
           onLeave: cbk2
-        expect( @M::callbacks.foo.onEnter ).toBe cbk1
-        expect( @M::callbacks.foo.onLeave ).toBe cbk2
+        expect( @M::_callbacks.foo.onEnter ).toBe cbk1
+        expect( @M::_callbacks.foo.onLeave ).toBe cbk2
 
     describe "subclass", ->
 
@@ -127,20 +127,20 @@ describe "Submachine", ->
       @M.transition from: "foo", to: "bar", on: "baz"
       class Sub extends @M
         @hasStates "bar"
-      expect( @M::states ).toEqual ["foo"]
+      expect( @M::_states ).toEqual ["foo"]
 
     it "lets me add transitions on subclass without affecting superclass", ->
       @M.transition from: "foo", to: "bar", on: "baz"
       class Sub extends @M
         @transition from: "baz", to: "foo", on: "qux"
-      expect( typeof @M::events.qux ).toBe "undefined"
+      expect( typeof @M::_events.qux ).toBe "undefined"
 
     it "lets me add callbacks on subclass without affecting superclass", ->
       cbk = ->
       @M.onEnter "*", cbk
       class Sub extends @M
         @onEnter "*", ->
-      expect( @M::callbacks["*"].onEnter ).toBe cbk
+      expect( @M::_callbacks["*"].onEnter ).toBe cbk
 
   describe "instance metods", ->
 
@@ -161,7 +161,7 @@ describe "Submachine", ->
 
         it "invokes onLeave callback on old state passing extra args", ->
           spy = @spy()
-          @M::callbacks =
+          @M::_callbacks =
             foo:
               onLeave: spy
           @m.switchTo "bar", 123, 321
@@ -169,7 +169,7 @@ describe "Submachine", ->
 
         it "invokes onEnter callback on new state passing extra args", ->
           spy = @spy()
-          @M::callbacks =
+          @M::_callbacks =
             bar:
               onEnter: spy
           @m.switchTo "bar", 123, 321
@@ -179,7 +179,7 @@ describe "Submachine", ->
           spy1 = @spy()
           spy2 = @spy()
           @m.state = "foo"
-          @M::callbacks =
+          @M::_callbacks =
             "*":
               onEnter: spy1
               onLeave: spy2

@@ -15,34 +15,34 @@ class Submachine
 
   @hasStates: ( args... ) ->
     if isArray args[0]
-      @::states = args[0]
+      @::_states = args[0]
     else
-      @::states = args
+      @::_states = args
 
   @transition: ( obj ) ->
     unless obj? and obj.from? and obj.to? and obj.on?
       throw new Error "transition must define 'from', 'to' and 'on'"
 
-    @::events ?= {}
-    unless @::hasOwnProperty "events"
-      @::events = clone @::events
-    @::events[ obj.on ] ?= []
-    @::events[ obj.on ].push
+    @::_events ?= {}
+    unless @::hasOwnProperty "_events"
+      @::_events = clone @::_events
+    @::_events[ obj.on ] ?= []
+    @::_events[ obj.on ].push
       from: obj.from,
       to:   obj.to
 
     @::[ obj.on ] ?= ( args... ) ->
-      for tr in @events[ obj.on ]
+      for tr in @_events[ obj.on ]
         if @state is tr.from or tr.from is "*"
           @switchTo tr.to, args...
           break
 
   @_addStateCallback: ( state, type, cbk ) ->
-    @::callbacks ?= {}
-    unless @::hasOwnProperty "callbacks"
-      @::callbacks = clone @::callbacks
-    @::callbacks[ state ] ?= {}
-    @::callbacks[ state ][ type ] = cbk
+    @::_callbacks ?= {}
+    unless @::hasOwnProperty "_callbacks"
+      @::_callbacks = clone @::_callbacks
+    @::_callbacks[ state ] ?= {}
+    @::_callbacks[ state ][ type ] = cbk
 
   @onEnter: ( state, cbk ) ->
     @_addStateCallback state, "onEnter", cbk
@@ -73,19 +73,19 @@ class Submachine
     @switchTo state
 
   switchTo: ( state, args... ) ->
-    if state not in @states
+    if state not in @_states
       throw new Error "invalid state #{state}"
 
-    @callbacks ?= {}
+    @_callbacks ?= {}
 
     if @state?
-      @callbacks[ @state ]?.onLeave?.apply( @, args )
-      @callbacks["*"]?.onLeave?.apply( @, args )
+      @_callbacks[ @state ]?.onLeave?.apply( @, args )
+      @_callbacks["*"]?.onLeave?.apply( @, args )
 
     @state = state
 
-    @callbacks[ @state ]?.onEnter?.apply( @, args )
-    @callbacks["*"]?.onEnter?.apply( @, args )
+    @_callbacks[ @state ]?.onEnter?.apply( @, args )
+    @_callbacks["*"]?.onEnter?.apply( @, args )
 
 # Export as:
 # CommonJS module
