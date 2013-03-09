@@ -42,7 +42,8 @@ class Submachine
     unless @::hasOwnProperty "_callbacks"
       @::_callbacks = clone @::_callbacks
     @::_callbacks[ state ] ?= {}
-    @::_callbacks[ state ][ type ] = cbk
+    @::_callbacks[ state ][ type ] ?= []
+    @::_callbacks[ state ][ type ].push cbk
 
   @onEnter: ( state, cbk ) ->
     @_addStateCallback state, "onEnter", cbk
@@ -76,16 +77,13 @@ class Submachine
     if state not in @_states
       throw new Error "invalid state #{state}"
 
-    @_callbacks ?= {}
-
-    if @state?
-      @_callbacks[ @state ]?.onLeave?.apply( @, args )
-      @_callbacks["*"]?.onLeave?.apply( @, args )
-
+    @_invokeStateCallbacks @state, "onLeave", args if @state?
     @state = state
+    @_invokeStateCallbacks @state, "onEnter", args
 
-    @_callbacks[ @state ]?.onEnter?.apply( @, args )
-    @_callbacks["*"]?.onEnter?.apply( @, args )
+  _invokeStateCallbacks: ( state, type, args ) ->
+    @_invokeStateCallbacks "*", type, args if state isnt "*"
+    cbk.apply( @, args ) for cbk in @_callbacks?[ state ]?[ type ] || []
 
 # Export as:
 # CommonJS module

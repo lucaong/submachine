@@ -78,13 +78,13 @@ describe "Submachine", ->
       it "adds an onEnter callback for the given state", ->
         cbk = ->
         @M.onEnter "foo", cbk
-        expect( @M::_callbacks.foo.onEnter ).toBe cbk
+        expect( @M::_callbacks.foo.onEnter.pop() ).toBe cbk
 
     describe "onLeave", ->
       it "adds an onLeave callback for the given state", ->
         cbk = ->
         @M.onLeave "foo", cbk
-        expect( @M::_callbacks.foo.onLeave ).toBe cbk
+        expect( @M::_callbacks.foo.onLeave.pop() ).toBe cbk
 
     describe "setupState", ->
       it "adds onEnter and onLeave callbacks for the given state", ->
@@ -93,8 +93,8 @@ describe "Submachine", ->
         @M.setupState "foo",
           onEnter: cbk1,
           onLeave: cbk2
-        expect( @M::_callbacks.foo.onEnter ).toBe cbk1
-        expect( @M::_callbacks.foo.onLeave ).toBe cbk2
+        expect( @M::_callbacks.foo.onEnter.pop() ).toBe cbk1
+        expect( @M::_callbacks.foo.onLeave.pop() ).toBe cbk2
 
     describe "subclass", ->
 
@@ -140,7 +140,7 @@ describe "Submachine", ->
       @M.onEnter "*", cbk
       class Sub extends @M
         @onEnter "*", ->
-      expect( @M::_callbacks["*"].onEnter ).toBe cbk
+      expect( @M::_callbacks["*"].onEnter.pop() ).toBe cbk
 
   describe "instance metods", ->
 
@@ -159,21 +159,25 @@ describe "Submachine", ->
 
       describe "if callbacks are defined", ->
 
-        it "invokes onLeave callback on old state passing extra args", ->
-          spy = @spy()
+        it "invokes onLeave callbacks on old state passing extra args", ->
+          spy1 = @spy()
+          spy2 = @spy()
           @M::_callbacks =
             foo:
-              onLeave: spy
+              onLeave: [ spy1, spy2 ]
           @m.switchTo "bar", 123, 321
-          expect( spy ).toHaveBeenCalledOnceWith 123, 321
+          expect( spy1 ).toHaveBeenCalledOnceWith 123, 321
+          expect( spy2 ).toHaveBeenCalledOnceWith 123, 321
 
-        it "invokes onEnter callback on new state passing extra args", ->
-          spy = @spy()
+        it "invokes onEnter callbacks on new state passing extra args", ->
+          spy1 = @spy()
+          spy2 = @spy()
           @M::_callbacks =
             bar:
-              onEnter: spy
+              onEnter: [ spy1, spy2 ]
           @m.switchTo "bar", 123, 321
-          expect( spy ).toHaveBeenCalledOnceWith 123, 321
+          expect( spy1 ).toHaveBeenCalledOnceWith 123, 321
+          expect( spy2 ).toHaveBeenCalledOnceWith 123, 321
 
         it "invokes wildcard callbacks", ->
           spy1 = @spy()
@@ -181,8 +185,8 @@ describe "Submachine", ->
           @m.state = "foo"
           @M::_callbacks =
             "*":
-              onEnter: spy1
-              onLeave: spy2
+              onEnter: [ spy1 ]
+              onLeave: [ spy2 ]
           @m.switchTo "bar", 123, 321
           expect( spy1 ).toHaveBeenCalledOnceWith 123, 321
           expect( spy2 ).toHaveBeenCalledOnceWith 123, 321
