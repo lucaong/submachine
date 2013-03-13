@@ -28,13 +28,15 @@ class Submachine
       @::_events = clone @::_events
     @::_events[ obj.on ] ?= []
     @::_events[ obj.on ].push
-      from: obj.from,
+      from: obj.from
       to:   obj.to
+      if:   obj.if
 
     @::[ obj.on ] ?= ( args... ) ->
       for tr in @_events[ obj.on ]
         if @state is tr.from or tr.from is "*"
-          @switchTo tr.to, args...
+          c = if typeof tr.if is "string" then @[ tr.if ] else tr.if
+          @switchTo tr.to, args... if not c? or c.call @, tr.to, args...
           break
 
   @_addStateCallback: ( state, type, cbk ) ->

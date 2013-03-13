@@ -26,15 +26,13 @@ describe "Submachine", ->
 
       before ->
         @M.hasStates "foo", "bar", "baz"
-        @spySwitchTo = @spy()
-        @stub( @m, "switchTo", @spySwitchTo )
+        @stub @m, "switchTo"
 
       after ->
-        delete @spySwitchTo
 
       it "adds a new event", ->
-        @M.transition from: "foo", to: "bar", on: "baz"
-        expect( @M::_events.baz[0] ).toEqual from: "foo", to: "bar"
+        @M.transition from: "foo", to: "bar", on: "baz", if: "qux"
+        expect( @M::_events.baz[0] ).toMatch from: "foo", to: "bar", if: "qux"
 
       it "defines a new instance method for the event", ->
         @M.transition from: "foo", to: "bar", on: "baz"
@@ -44,35 +42,63 @@ describe "Submachine", ->
         @M.transition from: "foo", to: "bar", on: "qux"
         @m.state = "foo"
         @m.qux()
-        expect( @spySwitchTo ).toHaveBeenCalledWith "bar"
+        expect( @m.switchTo ).toHaveBeenCalledWith "bar"
 
       it "defines an instance method that doesn't call switchTo('bar') if state is not 'foo'", ->
         @M.transition from: "foo", to: "bar", on: "qux"
         @m.state = "baz"
         @m.qux()
-        refute.calledWith @spySwitchTo, "bar"
+        refute.calledWith @m.switchTo, "bar"
+
+      it "defines an instance method that calls the condition function passing state and args", ->
+        spy = @spy()
+        @M.transition from: "foo", to: "bar", on: "qux", if: spy
+        @m.state = "foo"
+        @m.qux 123, "abc"
+        expect( spy ).toHaveBeenCalledOnceWith "bar", 123, "abc"
+
+      it "defines an instance method that calls the condition function in the scope of the instance", ->
+        probe = null
+        @M.transition from: "foo", to: "bar", on: "qux", if: -> probe = @
+        @m.state = "foo"
+        @m.qux 123, "abc"
+        expect( probe ).toBe @m
+
+      it "defines an instance method that calls the instance method corresponding to the condition, if condition is a string", ->
+        spy = @spy()
+        @M.transition from: "foo", to: "bar", on: "qux", if: "quux"
+        @m.state = "foo"
+        @m.quux = spy
+        @m.qux 123, "abc"
+        expect( spy ).toHaveBeenCalledOnceWith "bar", 123, "abc"
+
+      it "defines an instance method that doesn't call switchTo('bar') if condition is not met", ->
+        @M.transition from: "foo", to: "bar", on: "qux", if: -> false
+        @m.state = "foo"
+        @m.qux()
+        refute.calledWith @m.switchTo, "bar"
 
       it "defines an instance method that calls switchTo passing extra args", ->
         @M.transition from: "foo", to: "bar", on: "qux"
         @m.state = "foo"
         @m.qux( 123, 321 )
-        expect( @spySwitchTo ).toHaveBeenCalledWith "bar", 123, 321
+        expect( @m.switchTo ).toHaveBeenCalledWith "bar", 123, 321
 
       it "lets me define more than one transition for an event", ->
         @M.transition from: "foo", to: "bar", on: "qux"
         @M.transition from: "bar", to: "baz", on: "qux"
         @m.state = "foo"
         @m.qux()
-        expect( @spySwitchTo ).toHaveBeenCalledWith "bar"
+        expect( @m.switchTo ).toHaveBeenCalledWith "bar"
         @m.state = "bar"
         @m.qux()
-        expect( @spySwitchTo ).toHaveBeenCalledWith "baz"
+        expect( @m.switchTo ).toHaveBeenCalledWith "baz"
 
       it "accepts `from: '*'` as wildcard", ->
         @M.transition from: "*", to: "bar", on: "qux"
         @m.state = "baz"
         @m.qux()
-        expect( @spySwitchTo ).toHaveBeenCalledWith "bar"
+        expect( @m.switchTo ).toHaveBeenCalledWith "bar"
 
     describe "onEnter", ->
       it "adds an onEnter callback for the given state", ->

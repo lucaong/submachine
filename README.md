@@ -89,9 +89,15 @@ triggering the transition and the name of the states the transition goes from
 and to (e.g. `{ on: "open", from: "locked", to: "unlocked" }` meaning than on
 event "open" the state transitions from "locked" to "unlocked"). It defines a
 method with the same name as the event, that triggers the transition to the
-"to" state if called when in the "from" state. More than one transition can be
-defined from the same event. Transitions are evaluated in order, so in case
-more than one transition applies, only the first one gets triggered.
+"to" state if called when in the "from" state. More than one transition can
+be defined from the same event. Transitions are evaluated in order, so in
+case more than one transition applies, only the first one gets triggered. In
+addition to the required `from`, `to`, and `on` options, it is possible to
+pass an `if` option specifying a condition that needs to be satisfied in
+order for the transition to occur. The value of this option can be either a
+function or a string. If it is a string, the instance method with that name
+is evaluated. In any case, the condition is evaluated in the scope of the
+instance.
 
 ### onEnter
 
