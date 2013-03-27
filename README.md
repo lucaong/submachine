@@ -84,33 +84,34 @@ array and uses them to compose the list of the valid states.
 
 ### transition
 
-`transition( obj )` usually takes an object literal specifying an event name
+`transition( obj )` takes an object literal specifying at least an event name
 triggering the transition and the name of the states the transition goes from
 and to (e.g. `{ on: "open", from: "locked", to: "unlocked" }` meaning than on
-event "open" the state transitions from "locked" to "unlocked"). It defines a
-method with the same name as the event, that triggers the transition to the
-"to" state if called when in the "from" state. More than one transition can
-be defined from the same event. Transitions are evaluated in order, so in
-case more than one transition applies, only the first one gets triggered. In
-addition to the required `from`, `to`, and `on` options, it is possible to
-pass an `if` option specifying a condition that needs to be satisfied in
-order for the transition to occur. The value of this option can be either a
-function or a string. If it is a string, the instance method with that name
-is evaluated. In any case, the condition is evaluated in the scope of the
+event `open` the state transitions from `locked` to `unlocked`). It expose the
+event as an instance method that triggers the transition to the "to" state if
+called when in the "from" state. More than one transition can be defined from
+the same event. Transitions are evaluated in order, so in case more than one
+transition applies, only the first one gets triggered.
+
+In addition to the required `from`, `to`, and `on` options, it is possible to
+pass an `if` option specifying a condition that needs to be satisfied in order
+for the transition to occur. The value of this option can be either a function
+or a string. If it is a string, the instance method with that name is
+evaluated. In any case, the condition is evaluated in the scope of the
 instance.
 
 ### onEnter
 
 `onEnter( state, fn )` causes the callback function `fn` to be called whenever
 transitioning to state `state`. `state` can be a state name, or the special
-wildcard "*" to mean "any state". The callback is evaluated in the scope of
+wildcard `"*"` to mean "any state". The callback is evaluated in the scope of
 the instance, and gets passed any argument passed to the event method.
 
 ### onLeave
 
 `onLeave( state, fn )` causes the callback function `fn` to be called whenever
 transitioning from state `state` to another. `state` can be a state name, or
-the special wildcard "*" to mean "any state". The callback is evaluated in the
+the special wildcard `"*"` to mean "any state". The callback is evaluated in the
 scope of the instance, and gets passed any argument passed to the event
 method.
 
@@ -158,6 +159,14 @@ normally should not be called directly.
   3. Send pull request (please do not change version number)
 
 ## Changelog
+
+### 0.1.1
+
+  * Possibility to attach multiple `onEnter` and `onLeave` callbacks for the same state
+
+  * Add `if` conditions on transitions
+
+  * Prefix internal properties with `_` to mark them more clearly as "private"
 
 ### 0.1.0
 
