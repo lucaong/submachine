@@ -1,0 +1,16 @@
+{
+  "name": "submachine",
+  "repo": "lucaong/submachine",
+  "version": "0.1.1",
+  "description": "A clean and readable DSL for easily creating finite state machines in Node and in the browser.",
+  "keywords": [
+    "state machine",
+    "finite state machine",
+    "fsm"
+  ],
+  "main": "./lib/submachine.js",
+  "scripts": [
+    "submachine.js"
+  ],
+  "license": "MIT"
+}
