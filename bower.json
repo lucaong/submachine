@@ -1,16 +1,31 @@
 {
   "name": "submachine",
-  "repo": "lucaong/submachine",
   "version": "0.1.1",
+  "homepage": "https://github.com/lucaong/submachine",
+  "authors": [
+    "Luca Ongaro <lukeongaro@gmail.com>"
+  ],
   "description": "A clean and readable DSL for easily creating finite state machines in Node and in the browser.",
+  "main": "lib/submachine.js",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
   "keywords": [
-    "state machine",
-    "finite state machine",
-    "fsm"
+    "FSM",
+    "finite",
+    "state",
+    "machine",
+    "state",
+    "machine"
   ],
-  "main": "./lib/submachine.js",
-  "scripts": [
-    "submachine.js"
-  ],
-  "license": "MIT"
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
 }
