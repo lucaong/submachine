@@ -5,6 +5,15 @@ JavaScript and CoffeeScript. With a footprint of less than 200 lines of
 unminified code and with no dependency, `Submachine` works in browser and in
 Node, and it can be imported with CommonJS, AMD and normal browser `<script>`.
 
+## Installation
+
+Either manually copy the file `lib/cartograph.js` in your project or, if you
+use Bower, then just run:
+
+```
+bower install submachine
+```
+
 ## Usage
 
 `Submachine` works in Node and in the browser, and has no dependency, but for
@@ -159,6 +168,10 @@ normally should not be called directly.
   3. Send pull request (please do not change version number)
 
 ## Changelog
+
+### 0.1.2
+
+  * Available for installation as a Bower package
 
 ### 0.1.1
 
