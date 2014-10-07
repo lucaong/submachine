@@ -7,7 +7,7 @@ Node, and it can be imported with CommonJS, AMD and normal browser `<script>`.
 
 ## Installation
 
-Either manually copy the file `lib/cartograph.js` in your project or, if you
+Either manually copy the file `lib/submachine.js` in your project or, if you
 use Bower, then just run:
 
 ```
